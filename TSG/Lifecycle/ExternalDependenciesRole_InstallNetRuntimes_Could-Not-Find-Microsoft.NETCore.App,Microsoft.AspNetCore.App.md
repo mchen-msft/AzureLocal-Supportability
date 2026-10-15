@@ -41,9 +41,23 @@ version or greater.
 
 # Mitigation Details
 
-## Make note of the version that must get installed
 
-The error message indicates the version of the .NET Core runtime that needs to get installed. 
+## Identify the right version of the runtime installer
+
+**The error message indicates the version of the .NET Core runtime that needs to get installed.**
+
+Here is a table for known version for releases of Azure Local for reference, but **confirm with the error message
+which version needs to be installed**.
+
+|Azure Local Build | Required Runtime Version |
+|------------------|--------------------------|
+| 2604             | 10.0.6                   |
+| 2605             | 10.0.8                   |
+| 2606             | 10.0.9                   |
+| 2607             | 10.0.10                  |
+| 2608             | 10.0.11                  |
+| 2609             | 10.0.12                  |
+
 
 ## Identify conflicting versions on nodes
 
@@ -82,7 +96,7 @@ has been removed.
 To be certain that the required runtime is installed, manually run the installers for the required runtimes.
 
 ```Powershell
-# Assuming the required version is 10.0.6.
+# Assuming the required version is 10.0.6. The required version will be in the error message.
 $RequiredVersion = "10.0.6"
 
 # 1. Confirm the required installer is present on node
