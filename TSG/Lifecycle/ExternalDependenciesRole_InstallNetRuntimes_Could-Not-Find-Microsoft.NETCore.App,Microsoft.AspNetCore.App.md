@@ -66,9 +66,10 @@ Get-ChildItem -Recurse -Path "C:\ProgramData\Package Cache\*\dotnet-runtime-$Con
 ## Run the uninstalls
 
 Run the found uninstallers on every node with the following command line parameters:
-```
-"<Found Path>\aspnetcore-runtime-10.0.10-win-x64.exe" /uninstall /quiet
-"<Found Path>\dotnet-runtime-10.0.10-win-x64.exe" /uninstall /quiet
+```Powershell
+# Replace <Found Path> with path found in previous step
+& "<Found Path>\aspnetcore-runtime-10.0.10-win-x64.exe" /uninstall /quiet
+& "<Found Path>\dotnet-runtime-10.0.10-win-x64.exe" /uninstall /quiet
 ```
 
 ## Confirm the conflicting newer runtimes are no longer installed:
