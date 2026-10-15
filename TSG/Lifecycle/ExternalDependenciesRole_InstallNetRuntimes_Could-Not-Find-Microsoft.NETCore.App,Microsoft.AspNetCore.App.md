@@ -41,13 +41,19 @@ version or greater.
 
 # Mitigation Details
 
+## Make note of the version that must get installed
+
+The error message indicates the version of the .NET Core runtime that needs to get installed. 
+
 ## Identify conflicting versions on nodes
 
-Run `dotnet --list-runtimes` to list all installed runtimes on every node.
+Run `dotnet --list-runtimes` to list all installed runtimes on every node. Make note of every newer
+version of the runtime found. These newer versions are preventing the required version from being
+installed.
 
-## Find the uninstaller command
+## Find the uninstaller commands
 
-Run the following to find the cached installer for the .NET Core runtimes on every node.
+Run the following to find the cached installer for the conflicting .NET Core runtimes on every node.
 The paths should be the same across all nodes.
 
 ```Powershell
@@ -56,7 +62,7 @@ Get-ChildItem -Recurse -Path "C:\ProgramData\Package Cache\*\aspnetcore-runtime-
 Get-ChildItem -Recurse -Path "C:\ProgramData\Package Cache\*\dotnet-runtime-10.0.10*.exe"
 ```
 
-## Run the uninstall
+## Run the uninstalls
 
 Run the found uninstallers on every node with the following command line parameters:
 ```
@@ -64,12 +70,11 @@ Run the found uninstallers on every node with the following command line paramet
 "<Found Path>\dotnet-runtime-10.0.10-win-x64.exe" /uninstall /quiet
 ```
 
-## Confirm the runtimes are no longer installed:
+## Confirm the conflicting newer runtimes are no longer installed:
 
-Run `dotnet --list-runtimes` on ever node again to make sure that the newer runtime
+Run `dotnet --list-runtimes` on every node again to make sure that the newer conflicting runtime
 has been removed.
 
 ## Resume Operation
 
-Resume the blocked operation and the ExternalDependenciesRole operation
-should complete successfully this time.
+Resume the blocked operation and the ExternalDependenciesRole operation should complete successfully this time.
