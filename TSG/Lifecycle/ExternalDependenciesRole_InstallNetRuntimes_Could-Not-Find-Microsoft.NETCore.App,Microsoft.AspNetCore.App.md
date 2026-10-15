@@ -58,8 +58,9 @@ The paths should be the same across all nodes.
 
 ```Powershell
 # Suppose the conflicting version is 10.0.10
-Get-ChildItem -Recurse -Path "C:\ProgramData\Package Cache\*\aspnetcore-runtime-10.0.10*.exe"
-Get-ChildItem -Recurse -Path "C:\ProgramData\Package Cache\*\dotnet-runtime-10.0.10*.exe"
+$ConflictVersion = "10.0.10"
+Get-ChildItem -Recurse -Path "C:\ProgramData\Package Cache\*\aspnetcore-runtime-$ConflictVersion*.exe"
+Get-ChildItem -Recurse -Path "C:\ProgramData\Package Cache\*\dotnet-runtime-$ConflictVersion*.exe"
 ```
 
 ## Run the uninstalls
