@@ -14,10 +14,10 @@ or
 Type 'InstallNetRuntimesLocally' of Role 'ExternalDependenciesRole' raised an exception: Could not find 'Microsoft.AspNetCore.App 10.0.x'
 ```
 
-# Issue Validation
-
 The error message indicates the version of .NETCore that is expected to be
-installed.
+installed did not install.
+
+# Issue Validation
 
 Run `dotnet --list-runtimes` to confirm that a newer version of the conflicting
 package is installed, specifically look at versions for the following runtimes:
@@ -30,7 +30,12 @@ mitigating the issue.
 
 # Cause
 
-Up to Azure Local 2610, the .NET runtime version check is pinned to a version.
+If a newer version of the .NETCore runtime package is installed, older versions
+of the installer default to a no-op install and shortcircuits to a success state.
+
+Up to Azure Local 2610, the post install validation check is pinned to the specific
+version, and since the installer did nothing, will raise a failure.
+
 Starting from 2610, the version check has been relaxed to accept a minimum
 version or greater.
 
