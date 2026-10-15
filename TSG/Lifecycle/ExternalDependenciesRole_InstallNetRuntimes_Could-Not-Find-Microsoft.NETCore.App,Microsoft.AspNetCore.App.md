@@ -51,13 +51,13 @@ Run `dotnet --list-runtimes` to list all installed runtimes on every node. Make 
 version of the runtime found. These newer versions are preventing the required version from being
 installed.
 
-## Find the uninstaller commands
+## Find the uninstallers for the conflicting runtimes
 
 Run the following to find the cached installer for the conflicting .NET Core runtimes on every node.
 The paths should be the same across all nodes.
 
 ```Powershell
-# Suppose the conflicting version is 10.0.10
+# Suppose the conflicting version is 10.0.10 - Update this to whatever found in the previous step.
 $ConflictVersion = "10.0.10"
 Get-ChildItem -Recurse -Path "C:\ProgramData\Package Cache\*\aspnetcore-runtime-$ConflictVersion*.exe"
 Get-ChildItem -Recurse -Path "C:\ProgramData\Package Cache\*\dotnet-runtime-$ConflictVersion*.exe"
@@ -76,6 +76,46 @@ Run the found uninstallers on every node with the following command line paramet
 
 Run `dotnet --list-runtimes` on every node again to make sure that the newer conflicting runtime
 has been removed.
+
+## Manually install the runtimes.
+
+To be certain that the required runtime is installed, manually run the installers for the required runtimes.
+
+```Powershell
+# Assuming the required version is 10.0.6.
+$RequiredVersion = "10.0.6"
+
+# 1. Confirm the required installer is present on node
+Get-ChildItem "c:\nugetstore\Microsoft.DotNet10.Runtime.Installer.$RequiredVersion\bin\dotnet-runtime-$RequiredVersion*"
+Get-ChildItem "c:\nugetstore\Microsoft.DotNet10.Runtime.Installer.$RequiredVersion\bin\aspnetcore-runtime-$RequiredVersion*"
+
+# If not present on node, search other nodes and copy over as needed
+
+# 2. Run the found installers
+& "c:\NugetStore\Microsoft.DotNet10.Runtime.Installer.$RequiredVersion\bin\dotnet-runtime-$RequiredVersion-win-x64.exe" /install /quiet
+& "c:\NugetStore\Microsoft.DotNet10.Runtime.Installer.$RequiredVersion\bin\aspnetcore-runtime-$RequiredVersion-win-x64.exe" /install /quiet
+```
+
+## Confirm the required runtimes are installed (and force a repair if not)
+
+```Powershell
+dotnet --list-runtimes
+
+# Make sure the right version of the runtime shows up.  For example, if the right version is 10.0.6, then
+# the following strings should appear in the output
+# "Microsoft.AspNetCore.App 10.0.6 [C:\Program Files\dotnet\shared\Microsoft.AspNetCore.App]"
+# "Microsoft.NETCore.App 10.0.6 [C:\Program Files\dotnet\shared\Microsoft.NETCore.App]"
+```
+
+If the runtimes are still not found, force a repair
+
+```Powershell
+# If still not installed, run repair
+& "c:\NugetStore\Microsoft.DotNet10.Runtime.Installer.$RequiredVersion\bin\dotnet-runtime-$RequiredVersion-win-x64.exe" /repair /quiet
+& "c:\NugetStore\Microsoft.DotNet10.Runtime.Installer.$RequiredVersion\bin\aspnetcore-runtime-$RequiredVersion-win-x64.exe" /repair /quiet
+```
+
+and then recheck.
 
 ## Resume Operation
 
