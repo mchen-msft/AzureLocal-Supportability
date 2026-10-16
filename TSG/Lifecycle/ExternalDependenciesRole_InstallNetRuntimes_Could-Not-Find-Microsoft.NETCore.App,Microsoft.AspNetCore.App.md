@@ -33,11 +33,11 @@ mitigating the issue.
 If a newer version of the .NETCore runtime package is installed, older versions
 of the installer default to a no-op install and shortcircuits to a success state.
 
-Up to Azure Local 2610, the post install validation check is pinned to the specific
+The post install validation check is pinned to the specific
 version, and since the installer did nothing, will raise a failure.
 
-Starting from 2610, the version check has been relaxed to accept a minimum
-version or greater.
+This will be addressed in future releases and the version check will be changed to a minimum
+version check.
 
 # Mitigation Details
 
